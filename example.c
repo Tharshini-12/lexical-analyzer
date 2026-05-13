@@ -1,13 +1,17 @@
 #include<stdio.h>
-
+/*
+   Multi-line comment
+   for testing lexical analyzer
+*/
 int main()
 {
-    int sum = 5;
-    float num = 10.5;
-    char ch = 'L';
-    char str[]="Lexical Analyzer";
+    //single line comment
+    int sum = 5; //Integer literal
+    float num = 10.5; //Float literal
+    char ch = 'L'; //Character literal
+    char str[]="Lexical Analyzer"; //String literal
 
-    printf("Hello World\n");
+    printf("Hello World\n"); //Printing output
 
     return 0;
 } 
