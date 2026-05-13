@@ -75,16 +75,6 @@ Token getNextToken()
             return tok;
         }
 
-        //operator
-        else if(strchr(operators,ch))
-        {
-            tok.tok_str[0]=ch;
-            tok.tok_str[1]='\0';
-
-            tok.type=OPERATOR;
-            return tok;
-        }
-
         //special character
         else if(strchr(specialCharacters,ch))
         {
@@ -143,6 +133,57 @@ Token getNextToken()
             tok.tok_str[i]='\0';
 
             tok.type=CONSTANT;
+            return tok;
+        }
+
+        //comment handling
+        else if(ch=='/')
+        {
+            char comment_next=fgetc(fp);
+
+            //single line comment
+            if(comment_next=='/')
+            {
+                while((ch=fgetc(fp))!=EOF && ch!='\n');
+                continue;
+            }
+
+            //multi line comment
+            else if(comment_next=='*')
+            {
+                char last=0;
+
+                while((ch=fgetc(fp))!=EOF)
+                {
+                    if(last=='*' && ch=='/')
+                    {
+                        break;
+                    }
+                    last=ch;
+                }
+                continue;
+            }
+
+            //what if normal division operator
+            else
+            {
+                fseek(fp,-1,SEEK_CUR); //move file ptr back
+
+                tok.tok_str[0]='/';
+                tok.tok_str[1]='\0';
+
+                tok.type=OPERATOR;
+                return tok; //returns / as operator token
+            }
+        }
+
+        //operator
+        else if(strchr(operators,ch))
+        {
+            tok.tok_str[0]=ch;
+            tok.tok_str[1]='\0';
+
+            tok.type=OPERATOR;
             return tok;
         }
     }
